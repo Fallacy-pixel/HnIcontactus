@@ -12,7 +12,8 @@
         input, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         button { background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
         button:hover { background: #0056b3; }
-        #form-result { text-align: center; margin-top: 15px; font-weight: bold; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #form-result { text-align: center; margin-top: 15px; font-weight: bold; min-height: 1.2em; }
         .success { color: green; }
         .error { color: red; }
     </style>
@@ -20,7 +21,7 @@
 <body>
 
     <form id="contact-form">
-        <h2>Contact Us</h2>
+        <h2 style="text-align: center; margin-top: 0;">Contact Us</h2>
         
         <div class="field">
             <label>First Name</label>
@@ -38,13 +39,13 @@
         </div>
 
         <div class="field">
-            <label>Phone Number (E.164 format)</label>
+            <label>Phone Number</label>
             <input type="tel" name="fi-sender-phone" placeholder="+12025550123" />
         </div>
 
         <div class="field">
             <label>Inquiry</label>
-            <textarea name="fi-text-inquiry" rows="4" required></textarea>
+            <textarea name="fi-text-message" rows="4" required></textarea>
         </div>
         
         <button type="submit" id="submit-btn">Send Inquiry</button>
@@ -55,16 +56,16 @@
 
     <script>
         const forminit = new Forminit();
-        const FORM_ID = '5yd6r238ep5'; // Your verified Form ID
+        const FORM_ID = '5yd6r238ep5'; // Your specific Form ID
         
         const form = document.getElementById('contact-form');
         const resultDisplay = document.getElementById('form-result');
         const submitBtn = document.getElementById('submit-btn');
         
         form.addEventListener('submit', async function(event) {
-            event.preventDefault(); // Stop page refresh
+            event.preventDefault(); 
             
-            // UI Feedback
+            // UI Update
             submitBtn.disabled = true;
             resultDisplay.textContent = 'Sending...';
             resultDisplay.className = '';
@@ -77,13 +78,13 @@
             submitBtn.disabled = false;
 
             if (error) {
-                // Displays specific Forminit error messages
-                resultDisplay.textContent = 'Error: ' + error.message;
+                // If phone is wrong format, this catches the error
+                resultDisplay.textContent = error.message;
                 resultDisplay.className = 'error';
                 return;
             }
             
-            // Step 4: Show success message
+            // Step 4: Show success message on the page
             resultDisplay.textContent = 'Message sent successfully!';
             resultDisplay.className = 'success';
             form.reset();
